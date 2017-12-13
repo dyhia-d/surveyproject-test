@@ -6,6 +6,9 @@
     "module": "es2015",
     "types": []
   },
+  "types": [
+    "knockout"
+  ],
   "exclude": [
     "test.ts",
     "**/*.spec.ts"

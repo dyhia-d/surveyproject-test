@@ -1,14 +1,72 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
-  <title>Surveyproject</title>
-  <base href="/">
+    <title>One choice - dropdown (type:&#39;dropdown&#39;). Get the choices from a restfull service. for plaform jQuery, SurveyJS Library Example</title>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://surveyjs.azureedge.net/0.96.1/survey.jquery.js"></script>
+  
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./index.css">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+
 </head>
 <body>
-  <app-root></app-root>
+    <div id="surveyElement"></div>
+    <div id="surveyResult"></div>
+  <script>
+    Survey.Survey.cssType = "bootstrap";
+
+    var json = { title: 'Maturity Survey Example', showProgressBar: 'top', pages: [
+    {
+      questions: [{
+          type: 'radiogroup',
+          name: 'price books',
+          title: 'Compared to our competitors, do you feel the Product is',
+          choices: ['Agree', 'Not agree', 'Strongly agree', 'Not sure']
+        }
+      ]
+    },{
+      questions: [{
+          type: 'radiogroup',
+          name: 'price to competitors',
+          title: 'Compared to our competitors, do you feel the Product is',
+          choices: ['Less expensive', 'Priced about the same', 'More expensive', 'Not sure']
+        }
+      ]
+    }, {
+        questions: [{
+            type: 'text',
+            name: 'email',
+            title: 'Thank you for taking our survey. Please enter your email address, then press the "Submit" button.'
+            }]
+        }]
+    };
+
+    window.survey = new Survey.Model(json);
+
+    survey.onComplete.add(function(result) {
+        document.querySelector('#surveyResult').innerHTML = "result: " + JSON.stringify(result.data);
+
+
+        var resultats =  JSON.stringify(result.data);
+
+        //this.SurveyService.addSurvey(resultats);
+    });
+
+    survey.onUpdateQuestionCssClasses.add(function(survey, options) {
+    var classes = options.cssClasses;
+
+    if (options.question.getType() === "matrix") {
+        classes.root = classes.root  + " custom-matrix";
+    }
+    });
+
+    $("#surveyElement").Survey({ 
+        model: survey 
+    });
+  </script>
+
 </body>
 </html>
